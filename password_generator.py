@@ -48,12 +48,22 @@ def password_generator(min_length: int = 1, length: None | int = None, max_lengt
 
 
 if __name__ == '__main__':
-    password = '1204ab'
-    for p in tqdm(password_generator(min_length=2, max_length=6,
-                                     digits=True, punctuation=False, letters='ab',
-                                     pattern='1???a?')):
-        if password == p:
-            print(f'Password: "{p}"')
-            break
-    else:
-        print('Password not found!')
+
+    testing = dict()
+
+    if 1:
+        testing['1204'] = {'length': 4,
+                           'digits': True, 'punctuation': False, 'letters': False}
+
+    if 1:
+        testing['1204ab'] = {'min_length': 2, 'max_length': 6,
+                             'digits': True, 'punctuation': False, 'letters': 'ab',
+                             'pattern': '1???a?'}
+
+    for password, kwargs in testing.items():
+        for p in tqdm(password_generator(**kwargs)):
+            if password == p:
+                print(f'Password: "{p}"')
+                break
+        else:
+            print('Password not found!')
