@@ -32,16 +32,26 @@ def password_generator(min_length: int = 1, length: None | int = None, max_lengt
     else:
         max_length = length
 
-    while length <= max_length:
+    if not pattern:
+        while length <= max_length:
+            for comb in product(alphabet, repeat=length):
+                yield ''.join(comb)
+            length += 1
+    else:  # TODO: переделать по правилам регулярных выражений
+        length = pattern.count('?')
+        question_indices = tuple(i for i, char in enumerate(pattern) if char == '?')  # индексы позиций '?'
         for comb in product(alphabet, repeat=length):
-            yield ''.join(comb)
-        length += 1
+            p = list(pattern)
+            for idx, el in zip(question_indices, comb):
+                p[idx] = el
+            yield ''.join(p)
 
 
 if __name__ == '__main__':
-    print('7??6?'.split('?'))
     password = '1204ab'
-    for p in tqdm(password_generator(min_length=2, max_length=6, digits=True, punctuation=False, letters='ab')):
+    for p in tqdm(password_generator(min_length=2, max_length=6,
+                                     digits=True, punctuation=False, letters='ab',
+                                     pattern='1???a?')):
         if password == p:
             print(f'Password: "{p}"')
             break
